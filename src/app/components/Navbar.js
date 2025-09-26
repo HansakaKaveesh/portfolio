@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
   FaInstagram,
   FaLinkedin,
@@ -8,16 +9,12 @@ import {
   FaBars,
   FaTimes,
 } from 'react-icons/fa';
-import { FiSun, FiMoon } from 'react-icons/fi';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
-  const [theme, setTheme] = useState('light');
-  const [mounted, setMounted] = useState(false);
 
-  // ✅ All menu items include proper # hash links
   const menuItems = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
@@ -36,75 +33,61 @@ export default function Navbar() {
   // Scroll state handling
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Theme setup
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem('theme');
-    setTheme(saved === 'dark' ? 'dark' : 'light');
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme, mounted]);
-
-  // Active section highlight
+  // Active section highlighting (if using one-page anchors)
   useEffect(() => {
     const ids = menuItems.map((m) => m.href.replace('#', ''));
     const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
-
     if (!sections.length) return;
-
     const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { rootMargin: '-40% 0px -55% 0px', threshold: 0.1 }
+      (entries) =>
+        entries.forEach(
+          (entry) => entry.isIntersecting && setActive(entry.target.id)
+        ),
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0.2 }
     );
-
-    sections.forEach((sec) => io.observe(sec));
+    sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
   }, [menuItems]);
 
   // Auto close mobile on resize
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 768) setIsOpen(false);
-    };
+    const onResize = () => window.innerWidth >= 768 && setIsOpen(false);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
   const headerClasses = [
     'sticky top-0 z-50',
-    'backdrop-blur supports-[backdrop-filter]:bg-black/50',
-    scrolled ? 'bg-black/70 shadow-lg' : 'bg-black/40',
-    'text-white transition-colors duration-300',
+    'backdrop-blur-xl bg-black/40 supports-[backdrop-filter]:bg-black/30',
+    scrolled ? 'shadow-md border-b border-white/10' : '',
+    'transition-colors duration-300',
   ].join(' ');
-
-  const toggleTheme = () => setTheme((p) => (p === 'light' ? 'dark' : 'light'));
 
   return (
     <header className={headerClasses}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <a
-          href="#home"
-          className="text-2xl font-extrabold bg-gradient-to-r from-teal-400 via-cyan-400 to-sky-400 bg-clip-text text-transparent"
-        >
-          Hansaka Wijesinghe
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+        {/* ✅ Logo image + brand name */}
+        <a href="/" className="flex items-center gap-2 hover:scale-105 transition">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+            <Image
+              src="/Wijex logo.png"  // place your logo image in /public/logo.png
+              alt="Brand logo"
+              fill
+              className="object-contain rounded-full border border-teal-400 shadow-md"
+              priority
+            />
+          </div>
+          <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent animate-gradient">
+            Hansaka Wijesinghe
+          </span>
         </a>
 
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-6 items-center">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-6 items-center text-sm font-medium">
           {menuItems.map(({ label, href }) => {
             const id = href.replace('#', '');
             const isActive = active === id;
@@ -114,8 +97,8 @@ export default function Navbar() {
                 href={href}
                 aria-current={isActive ? 'page' : undefined}
                 className={[
-                  'relative font-medium transition-colors duration-200',
-                  isActive ? 'text-teal-300' : 'text-white/90 hover:text-teal-300',
+                  'relative transition-colors duration-200',
+                  isActive ? 'text-teal-300' : 'text-white/80 hover:text-teal-300',
                   'link-underline',
                 ].join(' ')}
               >
@@ -125,9 +108,10 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Right side */}
+        {/* Right Side */}
         <div className="hidden md:flex items-center gap-3">
-          <div className="flex gap-3 text-xl">
+          {/* Socials */}
+          <div className="flex gap-2 text-lg">
             {socialIcons.map(({ icon, link, label }, i) => (
               <a
                 key={i}
@@ -135,31 +119,16 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 hover:shadow-teal-400/40 transition transform hover:scale-110"
               >
                 {icon}
               </a>
             ))}
           </div>
-
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className="ml-2 inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
-            aria-label="Toggle theme"
-          >
-            {mounted &&
-              (theme === 'dark' ? (
-                <FiSun className="text-yellow-300 text-lg" />
-              ) : (
-                <FiMoon className="text-cyan-200 text-lg" />
-              ))}
-          </button>
-
           {/* CTA */}
           <a
             href="#contact"
-            className="ml-2 inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition"
+            className="ml-2 px-4 py-2.5 text-sm rounded-md font-medium bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-md hover:scale-105 transition"
           >
             Get a Quote
           </a>
@@ -189,36 +158,26 @@ export default function Navbar() {
             <a
               key={label}
               href={href}
-              className="block text-white/90 text-lg hover:text-teal-300 transition-colors"
+              className="block text-white/90 text-base hover:text-teal-300 transition"
               onClick={() => setIsOpen(false)}
             >
               {label}
             </a>
           ))}
 
-          <div className="mt-3 flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
-              aria-label="Toggle theme"
-            >
-              {mounted &&
-                (theme === 'dark' ? (
-                  <FiSun className="text-yellow-300 text-xl" />
-                ) : (
-                  <FiMoon className="text-cyan-200 text-xl" />
-                ))}
-            </button>
+          {/* CTA in Mobile */}
+          <div className="mt-4">
             <a
               href="#contact"
               onClick={() => setIsOpen(false)}
-              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition"
+              className="w-full inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-cyan-500 hover:to-indigo-500 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition transform hover:scale-105 text-sm"
             >
               Get a Quote
             </a>
           </div>
 
-          <div className="flex gap-4 text-xl pt-2">
+          {/* Socials */}
+          <div className="flex gap-4 text-lg pt-3 justify-center">
             {socialIcons.map(({ icon, link, label }, index) => (
               <a
                 key={index}
@@ -226,7 +185,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 hover:shadow-teal-400/40 transition transform hover:scale-110"
                 onClick={() => setIsOpen(false)}
               >
                 {icon}
@@ -238,18 +197,27 @@ export default function Navbar() {
 
       {/* Styles */}
       <style jsx global>{`
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient-shift 6s ease infinite;
+        }
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
         .link-underline::after {
           content: '';
           position: absolute;
           left: 50%;
-          bottom: -6px;
+          bottom: -4px;
           transform: translateX(-50%) scaleX(0);
           transform-origin: center;
           height: 2px;
           width: 100%;
           max-width: 24px;
           background: linear-gradient(90deg, #14b8a6, #22d3ee, #38bdf8);
-          transition: transform 200ms ease;
+          transition: transform 250ms ease;
           border-radius: 9999px;
         }
         .link-underline:hover::after,
@@ -258,9 +226,11 @@ export default function Navbar() {
         }
         @keyframes slideDown {
           from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide-down { animation: slideDown 220ms ease-out; }
+        .animate-slide-down {
+          animation: slideDown 220ms ease-out;
+        }
       `}</style>
     </header>
   );

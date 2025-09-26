@@ -1,3 +1,4 @@
+"use client";
 import { FaCode, FaPaintBrush, FaMobileAlt, FaChartLine, FaServer, FaTools } from "react-icons/fa";
 
 export default function Services() {
