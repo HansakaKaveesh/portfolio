@@ -17,7 +17,9 @@ import {
 function Badge({ children, label }) {
   return (
     <span
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur-sm text-white/95 hover:bg-white/20 transition text-xl"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full
+                 bg-white/10 ring-1 ring-white/15 backdrop-blur-sm text-white/95 
+                 hover:bg-white/20 transition text-xl shadow-md hover:shadow-teal-400/40"
       title={label}
       aria-label={label}
     >
@@ -55,7 +57,7 @@ function Orbit({ radius = 260, duration = '45s', delay = '0s', children, ringOpa
 export default function OrbitHero() {
   return (
     <section
-      className="relative overflow-hidden min-h-[90vh] flex flex-col items-center justify-start pt-16 pb-24 px-6
+      className="relative overflow-hidden min-h-[90vh] flex flex-col items-center justify-start pt-16 pb-24 px-6 
                  bg-gradient-to-b from-[#0b0615] to-[#110a1f] text-white"
       aria-label="Join a cross-functional team"
     >
@@ -73,7 +75,7 @@ export default function OrbitHero() {
         </p>
       </div>
 
-      {/* Tech badges */}
+      {/* Tech badges row */}
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3 z-10">
         <Badge label="Figma"><SiFigma /></Badge>
         <Badge label="React"><SiReact /></Badge>
@@ -91,12 +93,13 @@ export default function OrbitHero() {
       {/* Fan wires */}
       <div className="relative h-14 w-full max-w-xl mt-4 pointer-events-none" aria-hidden="true">
         {[...Array(9)].map((_, i) => {
-          const spread = 40; // degrees +/- from vertical
+          const spread = 40;
           const angle = -spread / 2 + (i * (spread / 8));
           return (
             <div
               key={i}
-              className="absolute left-1/2 top-0 h-24 w-[2px] bg-gradient-to-b from-transparent via-violet-400/20 to-transparent"
+              className="absolute left-1/2 top-0 h-24 w-[2px] 
+                         bg-gradient-to-b from-transparent via-violet-400/20 to-transparent"
               style={{
                 transform: `translateX(-50%) rotate(${angle}deg)`,
                 transformOrigin: 'top center',
@@ -109,24 +112,26 @@ export default function OrbitHero() {
       {/* Orbit system */}
       <div className="relative mt-12 w-full max-w-4xl aspect-[2.4/1]">
         {/* Background glow ellipse */}
-        <div className="absolute inset-0 rounded-full blur-3xl bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,.25),transparent_70%)]" />
+        <div className="absolute inset-0 rounded-full blur-3xl 
+                        bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,.25),transparent_70%)]" />
 
-        {/* Orbits */}
-        <Orbit radius={260} duration="70s" ringOpacity={0.12}>
+        {/* Orbits (slower outside, faster inside) */}
+        <Orbit radius={260} duration="90s" ringOpacity={0.1}>
           <Badge label="JavaScript"><SiJavascript /></Badge>
         </Orbit>
-        <Orbit radius={200} duration="45s" ringOpacity={0.18} delay="-6s">
+        <Orbit radius={200} duration="55s" ringOpacity={0.15} delay="-6s">
           <Badge label="React"><SiReact /></Badge>
         </Orbit>
-        <Orbit radius={150} duration="28s" ringOpacity={0.22} delay="-12s">
+        <Orbit radius={150} duration="35s" ringOpacity={0.2} delay="-12s">
           <Badge label="Next.js"><SiNextdotjs /></Badge>
         </Orbit>
 
-        {/* Decorative elliptical tracks */}
+        {/* Decorative elliptical rings */}
         {[0, 1, 2].map((idx) => (
           <div
             key={idx}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-violet-400/15"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+                       rounded-[50%] border border-violet-400/15"
             style={{
               width: `${92 - idx * 6}%`,
               height: `${52 - idx * 4}%`,
@@ -134,17 +139,21 @@ export default function OrbitHero() {
           />
         ))}
 
-        {/* Center glowing sphere + Image */}
+        {/* Center glowing sphere with logo */}
         <div
           className="absolute left-1/2 top-1/2 w-44 h-44 -translate-x-1/2 -translate-y-1/2 rounded-full
-                     bg-[radial-gradient(circle_at_50%_40%,#8b5cf6_20%,#5b21b6_65%,transparent_75%)]
-                     ring-2 ring-white/10 shadow-lg overflow-hidden flex items-center justify-center"
+                     bg-[radial-gradient(circle_at_50%_40%,#8b5cf6_20%,#5b21b6_70%,transparent_80%)]
+                     ring-2 ring-white/10 shadow-xl flex items-center justify-center overflow-hidden
+                     group hover:scale-105 transition-transform duration-500"
         >
+          {/* Glow pulse animation */}
+          <div className="absolute inset-0 rounded-full bg-teal-400/20 animate-ping" />
           <Image
-            src="/Wijex logo.png"   // <-- put your logo or photo inside /public
+            src="/Wijex logo.png"
             alt="Central Logo"
-            fill                 // fills the parent div
-            className="object-cover"
+            fill
+            className="object-contain relative z-10 transition-transform duration-700 
+                       group-hover:scale-110 group-hover:rotate-3"
             sizes="176px"
             priority
           />
