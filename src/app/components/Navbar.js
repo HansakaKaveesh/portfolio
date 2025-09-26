@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // ✅ Import Link
 import {
   FaInstagram,
   FaLinkedin,
@@ -16,7 +17,7 @@ export default function Navbar() {
   const [active, setActive] = useState('');
 
   const menuItems = [
-    { label: 'Home', href: '/' },
+    { label: 'Home', href: '/' },       // ✅ internal pages
     { label: 'About', href: '/about' },
     { label: 'Services', href: '/services' },
     { label: 'Blog', href: '/blog' },
@@ -37,28 +38,20 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Active section highlighting (if using one-page anchors)
+  // Active section tracking
   useEffect(() => {
     const ids = menuItems.map((m) => m.href.replace('#', ''));
     const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
     if (!sections.length) return;
     const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach(
-          (entry) => entry.isIntersecting && setActive(entry.target.id)
-        ),
+      (entries) => entries.forEach((entry) =>
+        entry.isIntersecting && setActive(entry.target.id)
+      ),
       { rootMargin: '-40% 0px -55% 0px', threshold: 0.2 }
     );
     sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
   }, [menuItems]);
-
-  // Auto close mobile on resize
-  useEffect(() => {
-    const onResize = () => window.innerWidth >= 768 && setIsOpen(false);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   const headerClasses = [
     'sticky top-0 z-50',
@@ -70,11 +63,11 @@ export default function Navbar() {
   return (
     <header className={headerClasses}>
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-        {/* ✅ Logo image + brand name */}
-        <a href="/" className="flex items-center gap-2 hover:scale-105 transition">
+        {/* ✅ Logo with Link */}
+        <Link href="/" className="flex items-center gap-2 hover:scale-105 transition">
           <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image
-              src="/Wijex logo.png"  // place your logo image in /public/logo.png
+              src="/Wijex logo.png"
               alt="Brand logo"
               fill
               className="object-contain rounded-full border border-teal-400 shadow-md"
@@ -84,7 +77,7 @@ export default function Navbar() {
           <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent animate-gradient">
             Hansaka Wijesinghe
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-6 items-center text-sm font-medium">
@@ -92,7 +85,7 @@ export default function Navbar() {
             const id = href.replace('#', '');
             const isActive = active === id;
             return (
-              <a
+              <Link
                 key={label}
                 href={href}
                 aria-current={isActive ? 'page' : undefined}
@@ -103,14 +96,13 @@ export default function Navbar() {
                 ].join(' ')}
               >
                 {label}
-              </a>
+              </Link>
             );
           })}
         </nav>
 
-        {/* Right Side */}
+        {/* Right Side (desktop socials + CTA) */}
         <div className="hidden md:flex items-center gap-3">
-          {/* Socials */}
           <div className="flex gap-2 text-lg">
             {socialIcons.map(({ icon, link, label }, i) => (
               <a
@@ -125,13 +117,12 @@ export default function Navbar() {
               </a>
             ))}
           </div>
-          {/* CTA */}
-          <a
-            href="#contact"
+          <Link
+            href="/contact"
             className="ml-2 px-4 py-2.5 text-sm rounded-md font-medium bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-md hover:scale-105 transition"
           >
             Get a Quote
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
@@ -145,7 +136,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Menu with Link */}
       <div
         id="mobileMenu"
         className={[
@@ -155,28 +146,28 @@ export default function Navbar() {
       >
         <div className="px-6 py-4 space-y-3">
           {menuItems.map(({ label, href }) => (
-            <a
+            <Link
               key={label}
               href={href}
               className="block text-white/90 text-base hover:text-teal-300 transition"
               onClick={() => setIsOpen(false)}
             >
               {label}
-            </a>
+            </Link>
           ))}
 
-          {/* CTA in Mobile */}
+          {/* Mobile CTA */}
           <div className="mt-4">
-            <a
-              href="#contact"
+            <Link
+              href="/contact"
               onClick={() => setIsOpen(false)}
               className="w-full inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-cyan-500 hover:to-indigo-500 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition transform hover:scale-105 text-sm"
             >
               Get a Quote
-            </a>
+            </Link>
           </div>
 
-          {/* Socials */}
+          {/* Mobile socials can remain <a> because external */}
           <div className="flex gap-4 text-lg pt-3 justify-center">
             {socialIcons.map(({ icon, link, label }, index) => (
               <a
@@ -194,44 +185,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {/* Styles */}
-      <style jsx global>{`
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient-shift 6s ease infinite;
-        }
-        @keyframes gradient-shift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .link-underline::after {
-          content: '';
-          position: absolute;
-          left: 50%;
-          bottom: -4px;
-          transform: translateX(-50%) scaleX(0);
-          transform-origin: center;
-          height: 2px;
-          width: 100%;
-          max-width: 24px;
-          background: linear-gradient(90deg, #14b8a6, #22d3ee, #38bdf8);
-          transition: transform 250ms ease;
-          border-radius: 9999px;
-        }
-        .link-underline:hover::after,
-        .link-underline[aria-current='page']::after {
-          transform: translateX(-50%) scaleX(1);
-        }
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-6px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slide-down {
-          animation: slideDown 220ms ease-out;
-        }
-      `}</style>
     </header>
   );
 }
