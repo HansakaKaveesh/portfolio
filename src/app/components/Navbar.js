@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FaInstagram,
   FaLinkedin,
@@ -14,13 +14,18 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
-  // 1) Stable default on SSR + initial client render
   const [theme, setTheme] = useState('light');
+  const [mounted, setMounted] = useState(false);
 
-  const menuItems = useMemo(
-    () => ['Home', 'About', 'Services', 'Blog', 'Project', 'Contact'],
-    []
-  );
+  // ✅ All menu items include proper # hash links
+  const menuItems = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Services', href: '/services' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Project', href: '/project' },
+    { label: 'Contact', href: '/contact' },
+  ];
 
   const socialIcons = [
     { icon: <FaInstagram aria-hidden="true" />, link: '#', label: 'Instagram' },
@@ -28,7 +33,7 @@ export default function Navbar() {
     { icon: <FaTwitter aria-hidden="true" />, link: '#', label: 'Twitter' },
   ];
 
-  // 2) Add scroll state for header styling
+  // Scroll state handling
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -36,26 +41,23 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // 3) After mount, sync theme from localStorage (safe, no hydration mismatch)
+  // Theme setup
   useEffect(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
-    const next = saved === 'dark' ? 'dark' : 'light';
-    setTheme(next);
+    setMounted(true);
+    const saved = localStorage.getItem('theme');
+    setTheme(saved === 'dark' ? 'dark' : 'light');
   }, []);
 
-  // 4) Apply theme class to <html>
   useEffect(() => {
-    if (typeof document === 'undefined') return;
+    if (!mounted) return;
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
-  }, [theme]);
+  }, [theme, mounted]);
 
   // Active section highlight
   useEffect(() => {
-    const ids = menuItems.map((m) => m.toLowerCase());
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    const ids = menuItems.map((m) => m.href.replace('#', ''));
+    const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
 
     if (!sections.length) return;
 
@@ -72,7 +74,7 @@ export default function Navbar() {
     return () => io.disconnect();
   }, [menuItems]);
 
-  // Close mobile menu when resizing up
+  // Auto close mobile on resize
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 768) setIsOpen(false);
@@ -84,35 +86,32 @@ export default function Navbar() {
   const headerClasses = [
     'sticky top-0 z-50',
     'backdrop-blur supports-[backdrop-filter]:bg-black/50',
-    scrolled ? 'bg-black/70 shadow-lg' : 'bg-black/40 shadow',
-    'text-white',
-    'transition-colors duration-300',
+    scrolled ? 'bg-black/70 shadow-lg' : 'bg-black/40',
+    'text-white transition-colors duration-300',
   ].join(' ');
 
   const toggleTheme = () => setTheme((p) => (p === 'light' ? 'dark' : 'light'));
 
   return (
     <header className={headerClasses}>
-
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <a
           href="#home"
           className="text-2xl font-extrabold bg-gradient-to-r from-teal-400 via-cyan-400 to-sky-400 bg-clip-text text-transparent"
-          aria-label="Graphic Art Solutions - Home"
         >
           Hansaka Wijesinghe
         </a>
 
-        {/* Desktop Nav */}
+        {/* Desktop Menu */}
         <nav className="hidden md:flex gap-6 items-center">
-          {menuItems.map((item) => {
-            const id = item.toLowerCase();
+          {menuItems.map(({ label, href }) => {
+            const id = href.replace('#', '');
             const isActive = active === id;
             return (
               <a
-                key={item}
-                href={`#${id}`}
+                key={label}
+                href={href}
                 aria-current={isActive ? 'page' : undefined}
                 className={[
                   'relative font-medium transition-colors duration-200',
@@ -120,13 +119,13 @@ export default function Navbar() {
                   'link-underline',
                 ].join(' ')}
               >
-                {item}
+                {label}
               </a>
             );
           })}
         </nav>
 
-        {/* Right: socials + theme + CTA */}
+        {/* Right side */}
         <div className="hidden md:flex items-center gap-3">
           <div className="flex gap-3 text-xl">
             {socialIcons.map(({ icon, link, label }, i) => (
@@ -137,18 +136,30 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 aria-label={label}
                 className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
-                title={label}
               >
                 {icon}
               </a>
             ))}
           </div>
 
-      
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className="ml-2 inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
+            aria-label="Toggle theme"
+          >
+            {mounted &&
+              (theme === 'dark' ? (
+                <FiSun className="text-yellow-300 text-lg" />
+              ) : (
+                <FiMoon className="text-cyan-200 text-lg" />
+              ))}
+          </button>
 
+          {/* CTA */}
           <a
             href="#contact"
-            className="ml-1 inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition"
+            className="ml-2 inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition"
           >
             Get a Quote
           </a>
@@ -157,8 +168,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setIsOpen((v) => !v)}
-          className="md:hidden text-2xl focus:outline-none relative z-10"
-          aria-label="Toggle Mobile Menu"
+          className="md:hidden text-2xl relative z-10"
           aria-controls="mobileMenu"
           aria-expanded={isOpen}
         >
@@ -170,19 +180,19 @@ export default function Navbar() {
       <div
         id="mobileMenu"
         className={[
-          'md:hidden overflow-hidden bg-black/95 border-t border-white/10',
-          isOpen ? 'animate-slide-down' : 'hidden',
+          'md:hidden overflow-hidden bg-black/95 border-t border-white/10 transition-all',
+          isOpen ? 'animate-slide-down' : 'max-h-0 opacity-0 pointer-events-none',
         ].join(' ')}
       >
         <div className="px-6 py-4 space-y-3">
-          {menuItems.map((item) => (
+          {menuItems.map(({ label, href }) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={label}
+              href={href}
               className="block text-white/90 text-lg hover:text-teal-300 transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              {item}
+              {label}
             </a>
           ))}
 
@@ -191,15 +201,13 @@ export default function Navbar() {
               onClick={toggleTheme}
               className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
               aria-label="Toggle theme"
-              title="Toggle theme"
             >
-              <span suppressHydrationWarning>
-                {theme === 'dark' ? (
-                  <FiSun className="text-yellow-300 text-xl" aria-hidden="true" />
+              {mounted &&
+                (theme === 'dark' ? (
+                  <FiSun className="text-yellow-300 text-xl" />
                 ) : (
-                  <FiMoon className="text-cyan-200 text-xl" aria-hidden="true" />
-                )}
-              </span>
+                  <FiMoon className="text-cyan-200 text-xl" />
+                ))}
             </button>
             <a
               href="#contact"
@@ -215,6 +223,8 @@ export default function Navbar() {
               <a
                 key={index}
                 href={link}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
                 onClick={() => setIsOpen(false)}

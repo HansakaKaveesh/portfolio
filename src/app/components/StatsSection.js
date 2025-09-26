@@ -11,27 +11,27 @@ import {
 
 const services = [
   {
-    icon: <FaPencilRuler size={24} />,
+    icon: <FaPencilRuler size={28} />,
     title: 'Web Design',
     projects: '120 Projects',
     accent: 'from-pink-500 to-rose-500',
   },
   {
-    icon: <FaObjectGroup size={24} />,
+    icon: <FaObjectGroup size={28} />,
     title: 'UI/UX Design',
     projects: '241 Projects',
     accent: 'from-fuchsia-500 to-purple-500',
   },
   {
-    icon: <FaSearch size={24} />,
+    icon: <FaSearch size={28} />,
     title: 'Web Research',
     projects: '240 Projects',
     accent: 'from-cyan-500 to-teal-500',
   },
   {
-    icon: <FaEnvelope size={24} />,
+    icon: <FaEnvelope size={28} />,
     title: 'Marketing',
-    projects: '331 Products',
+    projects: '331 Projects', // ← fixed wording consistency
     accent: 'from-amber-500 to-orange-500',
   },
 ];
@@ -46,10 +46,6 @@ const stats = [
 export default function StatsSection() {
   return (
     <section className="relative px-6 py-20 max-w-7xl mx-auto">
-      {/* Decorative blobs 
-      <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-pink-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-28 -right-16 h-80 w-80 rounded-full bg-purple-500/10 blur-3xl" /> */}
-
       {/* Header */}
       <div className="mb-10 flex flex-col items-center text-center">
         <span className="inline-flex items-center gap-2 text-sm text-pink-400/90 bg-pink-500/10 border border-pink-500/20 px-3 py-1 rounded-full">
@@ -58,7 +54,7 @@ export default function StatsSection() {
         <h2 className="mt-3 text-3xl md:text-4xl font-extrabold text-white tracking-tight">
           Crafting Delightful Digital Experiences
         </h2>
-        <p className="mt-3 max-w-2xl text-sm md:text-base text-pink-100/80">
+        <p className="mt-3 max-w-2xl text-sm md:text-base text-pink-100">
           From product research to pixel-perfect design and impactful marketing, we bring ideas to life.
         </p>
       </div>
@@ -68,7 +64,7 @@ export default function StatsSection() {
         {services.map((service, index) => (
           <div
             key={index}
-            className="group rounded-2xl p-[1px] bg-gradient-to-br from-pink-600/60 via-fuchsia-500/60 to-violet-500/60 shadow-lg hover:shadow-pink-600/30 transition-transform duration-300 hover:-translate-y-1"
+            className={`group rounded-2xl p-[1px] bg-gradient-to-br ${service.accent} shadow-lg hover:shadow-pink-600/40 transition-transform duration-300 hover:-translate-y-1`}
           >
             <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6 h-full flex flex-col items-center text-center border border-white/5">
               {/* Icon ring */}
@@ -82,9 +78,9 @@ export default function StatsSection() {
               <h3 className="text-base md:text-lg font-semibold text-white mb-1">
                 {service.title}
               </h3>
-              <p className="text-xs md:text-sm text-pink-200/90">{service.projects}</p>
+              <p className="text-xs md:text-sm text-pink-100">{service.projects}</p>
 
-              {/* Subtle divider + CTA */}
+              {/* CTA */}
               <div className="mt-4 h-px w-10 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <a
                 href="#projects"
@@ -109,24 +105,18 @@ export default function StatsSection() {
             <h2 className="text-4xl font-black mb-4 text-pink-400 relative z-10">
               10 Years of Experience
             </h2>
-            <ul className="space-y-3 text-pink-100/90 text-sm leading-relaxed relative z-10">
+            <ul className="space-y-3 text-pink-100 text-sm leading-relaxed relative z-10">
               <li className="flex items-start gap-2">
                 <FaCheckCircle className="text-pink-400 mt-[2px]" />
-                <span>
-                  Industry-leading expertise to elevate strategy and brand positioning.
-                </span>
+                <span>Industry-leading expertise to elevate strategy and brand positioning.</span>
               </li>
               <li className="flex items-start gap-2">
                 <FaCheckCircle className="text-pink-400 mt-[2px]" />
-                <span>
-                  Streamlined workflows for faster delivery and scalable design systems.
-                </span>
+                <span>Streamlined workflows for faster delivery and scalable design systems.</span>
               </li>
               <li className="flex items-start gap-2">
                 <FaCheckCircle className="text-pink-400 mt-[2px]" />
-                <span>
-                  Human-centered solutions that convert and keep users engaged.
-                </span>
+                <span>Human-centered solutions that convert and keep users engaged.</span>
               </li>
             </ul>
           </div>
@@ -137,14 +127,14 @@ export default function StatsSection() {
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="rounded-2xl p-[1px] bg-gradient-to-br from-white/10 to-white/5 hover:from-pink-500/25 hover:to-fuchsia-500/25 transition-shadow"
+              className="rounded-2xl p-[1px] bg-gradient-to-br from-white/10 to-white/5 hover:from-pink-500/25 hover:to-fuchsia-500/25"
             >
-              <div className="bg-gray-900/90 backdrop-blur-sm p-8 rounded-2xl text-center border border-white/5 shadow-md hover:shadow-pink-600/25 transition">
+              <div className="bg-gray-900/90 backdrop-blur-sm p-8 rounded-2xl text-center border border-white/5 shadow-md hover:shadow-pink-600/30 transition">
                 <div className="flex items-center justify-center gap-2">
                   <FaStar className="text-pink-400" aria-hidden="true" />
                   <h3 className="text-3xl font-extrabold text-white">{stat.number}</h3>
                 </div>
-                <p className="text-xs md:text-sm text-pink-200 mt-2">{stat.label}</p>
+                <p className="text-xs md:text-sm text-pink-100 mt-2">{stat.label}</p>
               </div>
             </div>
           ))}

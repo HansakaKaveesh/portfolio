@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import {
   SiReact,
   SiNextdotjs,
@@ -16,7 +17,7 @@ import {
 function Badge({ children, label }) {
   return (
     <span
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur-sm text-white/95 hover:bg-white/20 transition"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur-sm text-white/95 hover:bg-white/20 transition text-xl"
       title={label}
       aria-label={label}
     >
@@ -25,11 +26,10 @@ function Badge({ children, label }) {
   );
 }
 
-/* A circular orbit that rotates its child around the center */
-function Orbit({ radius = 260, duration = '45s', delay = '0s', children, ringOpacity = 0.18 }) {
+function Orbit({ radius = 260, duration = '45s', delay = '0s', children, ringOpacity = 0.2 }) {
   return (
     <div
-      className="absolute left-1/2 top-1/2 rounded-full border border-violet-400/20"
+      className="absolute left-1/2 top-1/2 rounded-full border border-violet-400/25"
       style={{
         width: radius * 2,
         height: radius * 2,
@@ -38,13 +38,13 @@ function Orbit({ radius = 260, duration = '45s', delay = '0s', children, ringOpa
       }}
       aria-hidden="true"
     >
-      {/* Rotator uses Tailwind's built-in spin; we override duration & delay via style */}
+      {/* Rotator */}
       <div
         className="absolute inset-0 animate-spin pointer-events-none"
         style={{ animationDuration: duration, animationDelay: delay }}
       >
-        {/* Place the icon at the top of the orbit */}
-        <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ top: 0 }}>
+        {/* Orbiting badge */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
           {children}
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function OrbitHero() {
         </p>
       </div>
 
-      {/* Top tech badges */}
+      {/* Tech badges */}
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3 z-10">
         <Badge label="Figma"><SiFigma /></Badge>
         <Badge label="React"><SiReact /></Badge>
@@ -81,7 +81,6 @@ export default function OrbitHero() {
         <Badge label="Node"><SiNodedotjs /></Badge>
         <Badge label="Tailwind"><SiTailwindcss /></Badge>
         <Badge label="JavaScript"><SiJavascript /></Badge>
-
         <Badge label="Adobe XD"><SiAdobexd /></Badge>
         <Badge label="Next.js"><SiNextdotjs /></Badge>
         <Badge label="Illustrator"><SiAdobeillustrator /></Badge>
@@ -89,52 +88,66 @@ export default function OrbitHero() {
         <Badge label="MongoDB"><SiMongodb /></Badge>
       </div>
 
-      {/* Fan “wires” connecting badges downwards */}
-      <div className="relative h-12 w-full max-w-xl mt-2 pointer-events-none" aria-hidden="true">
-        {[...Array(7)].map((_, i) => (
+      {/* Fan wires */}
+      <div className="relative h-14 w-full max-w-xl mt-4 pointer-events-none" aria-hidden="true">
+        {[...Array(9)].map((_, i) => {
+          const spread = 40; // degrees +/- from vertical
+          const angle = -spread / 2 + (i * (spread / 8));
+          return (
+            <div
+              key={i}
+              className="absolute left-1/2 top-0 h-24 w-[2px] bg-gradient-to-b from-transparent via-violet-400/20 to-transparent"
+              style={{
+                transform: `translateX(-50%) rotate(${angle}deg)`,
+                transformOrigin: 'top center',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Orbit system */}
+      <div className="relative mt-12 w-full max-w-4xl aspect-[2.4/1]">
+        {/* Background glow ellipse */}
+        <div className="absolute inset-0 rounded-full blur-3xl bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,.25),transparent_70%)]" />
+
+        {/* Orbits */}
+        <Orbit radius={260} duration="70s" ringOpacity={0.12}>
+          <Badge label="JavaScript"><SiJavascript /></Badge>
+        </Orbit>
+        <Orbit radius={200} duration="45s" ringOpacity={0.18} delay="-6s">
+          <Badge label="React"><SiReact /></Badge>
+        </Orbit>
+        <Orbit radius={150} duration="28s" ringOpacity={0.22} delay="-12s">
+          <Badge label="Next.js"><SiNextdotjs /></Badge>
+        </Orbit>
+
+        {/* Decorative elliptical tracks */}
+        {[0, 1, 2].map((idx) => (
           <div
-            key={i}
-            className="absolute left-1/2 top-0 h-24 w-[2px] bg-gradient-to-b from-transparent via-violet-400/20 to-violet-400/0"
+            key={idx}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-violet-400/15"
             style={{
-              transform: `translateX(-50%) rotate(${(-18 + i * 6)}deg)`,
-              transformOrigin: 'top center',
+              width: `${92 - idx * 6}%`,
+              height: `${52 - idx * 4}%`,
             }}
           />
         ))}
-      </div>
 
-      {/* Central area */}
-      <div className="relative mt-10 w-full max-w-4xl aspect-[2.4/1]">
-        {/* Background glow ellipse */}
-        <div className="absolute inset-0 rounded-full blur-3xl bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,.25),transparent_65%)]" />
-
-        {/* Orbits */}
-        <div className="absolute inset-0">
-          <Orbit radius={260} duration="70s" ringOpacity={0.12}>
-            <Badge label="JS"><SiJavascript /></Badge>
-          </Orbit>
-          <Orbit radius={220} duration="45s" ringOpacity={0.16} delay="-4s">
-            <Badge label="React"><SiReact /></Badge>
-          </Orbit>
-          <Orbit radius={180} duration="28s" ringOpacity={0.20} delay="-8s">
-            <Badge label="Next.js"><SiNextdotjs /></Badge>
-          </Orbit>
-        </div>
-
-        {/* Decorative elliptical tracks */}
-        <div className="absolute left-1/2 top-[58%] -translate-x-1/2 w-[92%] h-[52%] rounded-[50%] border border-violet-400/15" />
-        <div className="absolute left-1/2 top-[62%] -translate-x-1/2 w-[86%] h-[48%] rounded-[50%] border border-violet-400/12" />
-        <div className="absolute left-1/2 top-[66%] -translate-x-1/2 w-[78%] h-[44%] rounded-[50%] border border-violet-400/10" />
-
-        {/* Center glowing sphere */}
+        {/* Center glowing sphere + Image */}
         <div
           className="absolute left-1/2 top-1/2 w-44 h-44 -translate-x-1/2 -translate-y-1/2 rounded-full
-                     bg-[radial-gradient(circle_at_50%_40%,#8b5cf6_15%,#5b21b6_60%,transparent_65%)]
-                     ring-2 ring-white/10 shadow-glow flex items-center justify-center"
+                     bg-[radial-gradient(circle_at_50%_40%,#8b5cf6_20%,#5b21b6_65%,transparent_75%)]
+                     ring-2 ring-white/10 shadow-lg overflow-hidden flex items-center justify-center"
         >
-          <span className="text-5xl font-black tracking-wider text-white/95 drop-shadow-[0_0_18px_rgba(255,255,255,.45)]">
-            Σ
-          </span>
+          <Image
+            src="/Wijex logo.png"   // <-- put your logo or photo inside /public
+            alt="Central Logo"
+            fill                 // fills the parent div
+            className="object-cover"
+            sizes="176px"
+            priority
+          />
         </div>
       </div>
     </section>

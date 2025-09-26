@@ -14,7 +14,19 @@ function GlassBubble({ children, className = '' }) {
       {/* subtle gradient tint */}
       <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-300/10 via-white/5 to-fuchsia-400/10" />
       {/* subtle inner highlight */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl [mask-image:radial-gradient(70%_180%_at_50%_-30%,black,transparent)] bg-white/10" />
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10"
+        style={{
+          WebkitMaskImage:
+            'radial-gradient(70% 180% at 50% -30%, black, transparent)',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskSize: 'cover',
+          maskImage:
+            'radial-gradient(70% 180% at 50% -30%, black, transparent)',
+          maskRepeat: 'no-repeat',
+          maskSize: 'cover',
+        }}
+      />
       <div className="relative">{children}</div>
     </div>
   );
@@ -25,7 +37,7 @@ function ScreenshotFrame({ src, alt }) {
     <div className="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-white/5 shadow-[0_15px_60px_rgba(80,0,200,.25)]">
       {/* glow behind image */}
       <div className="absolute -inset-12 -z-10 blur-3xl bg-[radial-gradient(60%_60%_at_50%_40%,rgba(139,92,246,.35),transparent)]" />
-      <div className="relative w-full aspect-[16/10]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
         <Image
           src={src}
           alt={alt}
@@ -45,7 +57,7 @@ function ProjectRow({
   description,
   image,
   href = '#',
-  flip = false, // when true, image on left and text on right
+  flip = false,
 }) {
   return (
     <div className="relative py-16 md:py-24">
@@ -66,12 +78,21 @@ function ProjectRow({
             {featured}
           </p>
           <h3 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
-            {title}
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:underline decoration-pink-400/60 underline-offset-4"
+            >
+              {title}
+            </a>
           </h3>
 
           <div className={flip ? 'md:flex md:justify-end' : ''}>
             <GlassBubble className="mt-5 hover:scale-[1.01] transition-transform">
-              <p className="text-sm/6 md:text-base/7">{description}</p>
+              <p className="text-sm leading-6 md:text-base md:leading-7">
+                {description}
+              </p>
             </GlassBubble>
           </div>
         </div>
@@ -80,7 +101,9 @@ function ProjectRow({
         <div
           className={[
             'md:col-span-6',
-            flip ? 'md:order-1 md:pr-8 md:translate-y-8' : 'md:order-2 md:pl-8 md:-translate-y-8',
+            flip
+              ? 'md:order-1 md:pr-8 md:translate-y-4'
+              : 'md:order-2 md:pl-8 md:translate-y-4',
           ].join(' ')}
         >
           <a href={href} target="_blank" rel="noreferrer noopener" className="block group">
@@ -97,7 +120,7 @@ export default function FeaturedProjects() {
     {
       title: 'Example Project',
       description:
-        'A web app for visualizing personalized Spotify data. View your top artists, top tracks, recently played tracks, and detailed audio information about each track. Create and save new playlists of recommended tracks based on your existing playlists and more.',
+        'A web app for visualizing personalized Spotify data. View your top artists, tracks, and deep insights. Create and save new playlists of recommended tracks based on your favorites.',
       image: { src: '/projects/wireframe-1.jpg', alt: 'Project mockup 1' },
       href: '#',
       flip: false,
@@ -105,7 +128,7 @@ export default function FeaturedProjects() {
     {
       title: 'Example Project',
       description:
-        'A web app for visualizing personalized Spotify data. View your top artists, top tracks, recently played tracks, and detailed audio information about each track. Create and save new playlists of recommended tracks based on your existing playlists and more.',
+        'Another visualization app demonstrating design workflows with clear, interactive dashboards and glowing UI highlights for that premium visual punch.',
       image: { src: '/projects/wireframe-2.jpg', alt: 'Project mockup 2' },
       href: '#',
       flip: true,
@@ -122,7 +145,7 @@ export default function FeaturedProjects() {
         <ProjectRow {...projects[0]} />
 
         {/* Center sparkles between rows */}
-        <div className="my-4 flex items-center justify-center gap-6 text-violet-200/70" aria-hidden="true">
+        <div className="my-10 flex items-center justify-center gap-6 text-violet-200/70" aria-hidden="true">
           <TbSparkles className="h-6 w-6" />
           <TbSparkles className="h-6 w-6" />
           <TbSparkles className="h-6 w-6" />

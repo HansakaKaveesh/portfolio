@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { FiMapPin, FiGlobe, FiUserPlus, FiArrowDownCircle } from 'react-icons/fi';
+import { FiUserPlus } from 'react-icons/fi';
 import { SiNextdotjs, SiTailwindcss, SiReact } from 'react-icons/si';
 import { FaGithub, FaLinkedin, FaTwitter, FaRocket } from 'react-icons/fa';
 
@@ -12,21 +12,21 @@ export default function Hero() {
       aria-label="Hero section"
     >
       {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/100 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black/95 z-0 pointer-events-none" />
       <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-teal-500/25 blur-[110px] rounded-full z-0 pointer-events-none" />
-      <div className="pointer-events-none absolute -bottom-24 -right-20 w-[480px] h-[480px] bg-indigo-500/20 blur-[120px] rounded-full z-0" />
+      <div className="pointer-events-none absolute -bottom-24 -right-20 w-[480px] h-[480px] bg-indigo-500/25 blur-[120px] rounded-full z-0" />
 
       {/* Avatar */}
       <div className="mb-8 relative z-10">
         <div
-          className="p-[3px] rounded-full"
+          className="p-[3px] rounded-full transition-transform duration-300 hover:scale-105"
           style={{
             background:
               'conic-gradient(from 180deg at 50% 50%, #14b8a6, #22d3ee, #6366f1, #14b8a6)',
           }}
         >
           <div className="rounded-full p-1 backdrop-blur-md bg-white/5 shadow-inner border border-white/10">
-            <div className="relative h-36 w-36 sm:h-40 sm:w-40 rounded-full overflow-hidden border-4 border-teal-500 shadow-xl transition-transform duration-300 hover:scale-105">
+            <div className="relative h-36 w-36 sm:h-40 sm:w-40 rounded-full overflow-hidden border-4 border-teal-500 shadow-xl">
               <Image
                 src="/my.jpg"
                 alt="Profile photo"
@@ -43,7 +43,7 @@ export default function Hero() {
       {/* Heading */}
       <h1 className="relative z-10 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
         Hi, I&apos;m{' '}
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-cyan-300 to-indigo-300">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-300 to-indigo-400">
           Hansaka Wijesinghe
         </span>
       </h1>
@@ -79,14 +79,14 @@ export default function Hero() {
       <div className="mt-10 flex flex-wrap justify-center gap-4 z-10">
         <a
           href="#projects"
-          className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-teal-500/40"
+          className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-teal-500/40 focus-visible:ring-2 focus-visible:ring-teal-400"
           aria-label="View projects"
         >
           <FaRocket className="text-white" aria-hidden="true" /> View Projects
         </a>
         <a
           href="#contact"
-          className="inline-flex items-center gap-2 border border-teal-400 text-teal-300 hover:bg-teal-600 hover:text-white py-3 px-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-teal-500/30 hover:-translate-y-1"
+          className="inline-flex items-center gap-2 border border-teal-400 text-teal-300 hover:bg-teal-600 hover:text-white py-3 px-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-teal-500/30 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-teal-400"
           aria-label="Hire me"
         >
           <FiUserPlus aria-hidden="true" /> Hire Me
@@ -100,46 +100,28 @@ export default function Hero() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
-          className="group inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition"
+          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition focus-visible:ring-2 focus-visible:ring-teal-400"
         >
-          <FaGithub className="text-white/90 group-hover:text-white text-xl" aria-hidden="true" />
+          <FaGithub className="text-white/90 group-hover:text-white text-2xl" aria-hidden="true" />
         </a>
         <a
           href="https://www.linkedin.com/"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="LinkedIn"
-          className="group inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition"
+          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition focus-visible:ring-2 focus-visible:ring-teal-400"
         >
-          <FaLinkedin className="text-sky-300 group-hover:text-sky-200 text-xl" aria-hidden="true" />
+          <FaLinkedin className="text-sky-300 group-hover:text-sky-200 text-2xl" aria-hidden="true" />
         </a>
         <a
           href="https://twitter.com/"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Twitter"
-          className="group inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition"
+          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 transition focus-visible:ring-2 focus-visible:ring-teal-400"
         >
-          <FaTwitter className="text-cyan-300 group-hover:text-cyan-200 text-xl" aria-hidden="true" />
+          <FaTwitter className="text-cyan-300 group-hover:text-cyan-200 text-2xl" aria-hidden="true" />
         </a>
-      </div>
-
-      {/* Meta */}
-      <div className="mt-10 text-sm text-gray-300 z-10 flex items-center gap-4">
-        <span className="inline-flex items-center gap-2">
-          <FiMapPin className="text-teal-300" aria-hidden="true" /> San Francisco
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <FiGlobe className="text-teal-300" aria-hidden="true" /> Available Worldwide
-        </span>
-      </div>
-
-      {/* Scroll cue */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-teal-300/90">
-        <FiArrowDownCircle
-          className="animate-bounce motion-reduce:animate-none text-3xl"
-          aria-hidden="true"
-        />
       </div>
     </section>
   );
