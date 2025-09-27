@@ -149,7 +149,7 @@ export default function OrbitHero() {
           {/* Glow pulse animation */}
           <div className="absolute inset-0 rounded-full bg-teal-400/20 animate-ping" />
           <Image
-            src="/Wijex logo.png"
+            src="/Wijex logoW.png"
             alt="Central Logo"
             fill
             className="object-contain relative z-10 transition-transform duration-700 

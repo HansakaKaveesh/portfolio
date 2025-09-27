@@ -29,13 +29,13 @@ export default function Contact() {
             <div className="flex items-center gap-4">
               <FaEnvelope className="text-teal-400 text-xl" />
               <a href="mailto:hello@example.com" className="text-gray-300 hover:text-white transition">
-                hello@example.com
+                hansakakaveesh2@gmail.com
               </a>
             </div>
             <div className="flex items-center gap-4">
               <FaPhoneAlt className="text-cyan-400 text-xl" />
               <a href="tel:+01012345678" className="text-gray-300 hover:text-white transition">
-                +01 012 345 678
+                +94 71 044 8366
               </a>
             </div>
             <div className="flex items-center gap-4">

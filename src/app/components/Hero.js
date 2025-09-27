@@ -126,7 +126,7 @@ export default function Hero() {
           <FaRocket /> View Projects
         </a>
         <a
-          href="#contact"
+          href="/contact"
           className="inline-flex items-center gap-2 border border-teal-400 text-teal-300 hover:bg-teal-600 hover:text-white py-3 px-6 rounded-xl shadow-md transition-transform hover:-translate-y-1 hover:shadow-teal-500/30"
         >
           <FiUserPlus /> Hire Me

@@ -4,31 +4,31 @@ import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 export default function Projects() {
   const projects = [
     {
-      title: "Portfolio Website",
+      title: "Visual Learning Management System",
       description:
-        "A responsive personal site built with Next.js, Tailwind CSS, and animations.",
-      image: "/projects/portfolio.jpg",
-      tags: ["Next.js", "Tailwind", "UI/UX"],
+        "A web app for visualizing personalized learning data, with recommended resources, top topics, and insights.",
+      image: "/Synapz.png",
+      tags: ["Php", "Tailwind", "MySQL", "UI/UX"],
       github: "https://github.com/yourusername/portfolio",
-      demo: "https://yourdomain.com",
+      demo: "https://synapzedu.infinityfreeapp.com/",
     },
     {
-      title: "E-Commerce Platform",
+      title: "Temple & Dhamma School Website",
       description:
-        "Full-stack e-commerce app with product listings, cart, authentication, and payments.",
-      image: "/projects/ecommerce.jpg",
-      tags: ["React", "Node.js", "MongoDB"],
-      github: "https://github.com/yourusername/ecommerce",
-      demo: "https://ecommerce-demo.com",
+        "A website for a temple and dhamma school, featuring event listings, resources, and community engagement.",
+      image: "/tem.png",
+      tags: ["Next.js", "Tailwind","MySQL", "Php"],
+      github: "https://github.com/yourusername/temple-website",
+      demo: "https://srisudarshanaramaviharaya.vercel.app",
     },
     {
-      title: "Blog CMS",
+      title: "Heama Chemicals",
       description:
-        "A content management system for blogging, with markdown editor and role-based access.",
-      image: "/projects/blog.jpg",
-      tags: ["Next.js", "GraphQL", "Postgres"],
-      github: "https://github.com/yourusername/blog-cms",
-      demo: "https://blogcms-demo.com",
+        "A content management system for managing chemical product information, with advanced search and filtering.",
+      image: "/Heama.png",
+      tags: ["Next.js", "Tailwind", "UI/UX"],
+      github: "https://github.com/yourusername/heama-chemicals",
+      demo: "https://heama-chemicals.vercel.app/",
     },
   ];
 

@@ -67,7 +67,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 hover:scale-105 transition">
           <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image
-              src="/Wijex logo.png"
+              src="/Wijex logoW.png"
               alt="Brand logo"
               fill
               className="object-contain rounded-full border border-teal-400 shadow-md"
