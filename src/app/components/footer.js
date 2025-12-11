@@ -48,11 +48,11 @@ export default function Footer() {
           <ul className="space-y-2 text-sm">
             <li>
               Email:{" "}
-              <a href="mailto:hello@example.com" className="hover:text-teal-300 transition-colors">
-                hello@example.com
+              <a href="mailto:hansakakaveesh2@gmail.com" className="hover:text-teal-300 transition-colors">
+                hansakakaveesh2@gmail.com
               </a>
             </li>
-            <li>Location: 🌍 Colombo, Sri Lanka</li>
+            <li>Location: Rajagiriya, Colombo, Sri Lanka</li>
           </ul>
         </div>
 
