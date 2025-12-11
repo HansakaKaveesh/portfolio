@@ -8,6 +8,9 @@ import {
   SiReact,
   SiPhp,
   SiMysql,
+  SiFigma,
+  SiAdobeillustrator,
+  SiAdobephotoshop,
 } from "react-icons/si";
 import { FaGithub, FaLinkedin, FaRocket, FaFacebook } from "react-icons/fa";
 
@@ -20,8 +23,10 @@ function useTypedText(words = [], speed = 120, pause = 1500) {
 
   useEffect(() => {
     if (index >= words.length) return;
+
     const timeout = setTimeout(() => {
       setSubIndex((prev) => prev + (forward ? 1 : -1));
+
       if (forward && subIndex === words[index].length) {
         setForward(false);
       } else if (!forward && subIndex === 0) {
@@ -38,7 +43,7 @@ function useTypedText(words = [], speed = 120, pause = 1500) {
     return () => clearInterval(blinkInterval);
   }, []);
 
-  return `${words[index].substring(0, subIndex)}${blink ? "|" : ""}`;
+  return `${words[index]?.substring(0, subIndex) ?? ""}${blink ? "|" : ""}`;
 }
 
 export default function Hero() {
@@ -73,7 +78,7 @@ export default function Hero() {
             <div className="relative h-36 w-36 sm:h-40 sm:w-40 rounded-full overflow-hidden border-4 border-teal-400 shadow-xl">
               <Image
                 src="/my.jpg"
-                alt="Profile photo"
+                alt="Hansaka Wijesinghe"
                 fill
                 sizes="(min-width: 640px) 10rem, 9rem"
                 className="object-cover"
@@ -98,7 +103,7 @@ export default function Hero() {
         <span className="text-teal-300 font-semibold">{typedText}</span>
       </p>
 
-      {/* Tech chips */}
+      {/* Dev tech chips */}
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3 z-10">
         <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-white/90">
           <SiReact className="text-cyan-300" /> React
@@ -117,8 +122,24 @@ export default function Hero() {
         </span>
       </div>
 
+      {/* Graphic design tools chips */}
+      <div className="mt-4 flex flex-col items-center gap-2 z-10">
+       
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-white/90">
+            <SiFigma className="text-pink-300" /> Figma
+          </span>
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-white/90">
+            <SiAdobeillustrator className="text-orange-400" /> Illustrator
+          </span>
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm text-white/90">
+            <SiAdobephotoshop className="text-blue-300" /> Photoshop
+          </span>
+        </div>
+      </div>
+
       {/* CTAs */}
-      <div className="mt-10 flex flex-wrap justify-center gap-4 z-10">
+      <div className="mt-4 flex flex-wrap justify-center gap-4 z-10">
         <a
           href="#projects"
           className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-transform hover:-translate-y-1 hover:shadow-teal-500/40"
@@ -134,11 +155,17 @@ export default function Hero() {
       </div>
 
       {/* Socials */}
-      <div className="mt-8 flex items-center gap-4 z-10">
+      <div className="mt-4 flex items-center gap-4 z-10">
         {[
           { href: "https://github.com/", icon: <FaGithub className="text-2xl" /> },
-          { href: "https://linkedin.com/", icon: <FaLinkedin className="text-sky-300 text-2xl" /> },
-          { href: "https://twitter.com/", icon: <FaFacebook className="text-cyan-300 text-2xl" /> },
+          {
+            href: "https://linkedin.com/",
+            icon: <FaLinkedin className="text-sky-300 text-2xl" />,
+          },
+          {
+            href: "https://facebook.com/",
+            icon: <FaFacebook className="text-cyan-300 text-2xl" />,
+          },
         ].map((social, idx) => (
           <a
             key={idx}
